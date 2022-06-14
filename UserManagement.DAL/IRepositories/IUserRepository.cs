@@ -14,7 +14,7 @@ public interface IUserRepository
     Task<IEnumerable<User>> GetAll();
     Task<User> GetByEmail(string email);
     Task<User> GetById(string id);
-    Task<bool> Insert(User entity);
+    Task<User> Insert(User entity);
     Task<User> LogIn(string email, string password);
     Task<bool> Update(User entity);
 }

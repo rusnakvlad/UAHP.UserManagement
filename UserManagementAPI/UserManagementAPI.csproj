@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
@@ -15,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\UAHause.CommonWork\UAHause.CommonWork\UAHause.CommonWork.csproj" />
     <ProjectReference Include="..\UserManagement.BLL\UserManagement.BLL.csproj" />
     <ProjectReference Include="..\UserManagement.DAL\UserManagement.DAL.csproj" />
   </ItemGroup>

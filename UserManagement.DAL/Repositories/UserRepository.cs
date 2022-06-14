@@ -22,12 +22,12 @@ public class UserRepository : IUserRepository
 
     }
 
-    public async Task<bool> Insert(User entity)
+    public async Task<User> Insert(User entity)
     {
-        var result = await UserManager.CreateAsync(entity);
+        await UserManager.CreateAsync(entity);
         await context.SaveChangesAsync();
         await UserManager.AddToRoleAsync(entity, "User");
-        return result.Succeeded;
+        return await UserManager.FindByEmailAsync(entity.Email);
     }
 
     public async Task<bool> Delete(User entity)

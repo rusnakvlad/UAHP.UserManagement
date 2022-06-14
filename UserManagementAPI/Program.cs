@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-#region REPOSITORIES
-builder.Services.AddTransient<IUserRepository, UserRepository>();
+#region RABBITMQ
+builder.Services.AddMassTransit(x =>
+{
+    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+    {
+        config.Host(new Uri("rabbitmq://localhost"), h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+    }));
+});
+
+builder.Services.AddMassTransitHostedService();
 #endregion
 
+#region REPOSITORIES
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+#endregion
 
 #region SERVICES
 builder.Services.AddTransient<IUserService, UserService>();
@@ -30,16 +46,21 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
 
+#region CONTROLLERS AND SWAGER
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+#endregion
 
+#region IDENTITY DBCONTEXT
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionString:connectDB"]));
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+#endregion
 
+#region AUTHENTICATION
 builder.Services
 // Adding Authentication
 .AddAuthentication(options => {
@@ -63,6 +84,7 @@ builder.Services
             LifetimeValidator = JwtOptions.ValidateLifeTime
         };
     });
+#endregion
 
 var app = builder.Build();
 

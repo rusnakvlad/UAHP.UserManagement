@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.BLL.DTO;
 using UserManagement.BLL.IServices;
@@ -10,9 +11,12 @@ namespace UserManagementAPI.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService userService;
-
-    public UserController(IUserService userService) => this.userService = userService;
-
+    private readonly IBus bus;
+    public UserController(IUserService userService, IBus bus)
+    {
+        this.userService = userService;
+        this.bus = bus;
+    }
     // Get All Users Profiles
     [HttpGet("GetAll")]
     public async Task<IEnumerable<UserProfileDTO>> GetAllUsersProfiles()
@@ -38,9 +42,22 @@ public class UserController : ControllerBase
 
     // Register new user
     [HttpPost("Register")]
-    public async Task<bool> Register([FromBody] UserRegisterDTO userRegisterDTO)
+    public async Task<UserProfileDTO> Register([FromBody] UserRegisterDTO userRegisterDTO)
     {
-        return await userService.RegisterUser(userRegisterDTO);
+        var result = await userService.RegisterUser(userRegisterDTO);
+
+        var user = new UAHause.CommonWork.Models.User
+        {
+            Id = result.Id,
+            Email = result.Email,
+            Name = result.Name,
+            Surname = result.Surname,
+            Phone = result.PhoneNumber
+        };
+
+        bus.Publish(user);
+
+        return result;
     }
 
     // Delete user by id

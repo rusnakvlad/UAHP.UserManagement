@@ -6,7 +6,7 @@ public interface IUserService
 {
     public Task<IEnumerable<UserProfileDTO>> GetAllUsersProfiles();
     public Task<UserProfileDTO> GetUserProfileById(string id);
-    public Task<bool> RegisterUser(UserRegisterDTO userRegisterDTO); // Add New User
+    public Task<UserProfileDTO> RegisterUser(UserRegisterDTO userRegisterDTO); // Add New User
     public Task<bool> DeleteUserById(string id);
     public Task<bool> UpdateUser(UserEditDTO userEditDTO);
     public Task<UserProfileDTO> GetUserProfileByEmail(string email);
