@@ -63,7 +63,8 @@ public class UserService : IUserService
 
     public async Task<UserProfileDTO> RegisterUser(UserRegisterDTO userRegisterDTO)
     {
-        var result = await Database.UserRepository.Insert(mapper.Map<User>(userRegisterDTO));
+        var user = mapper.Map<User>(userRegisterDTO);
+        var result = await Database.UserRepository.Insert(user);
         return mapper.Map<UserProfileDTO>(result);
     }
 
