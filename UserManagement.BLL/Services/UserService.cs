@@ -7,6 +7,8 @@ using UserManagement.BLL.DTO;
 using UserManagement.BLL.IServices;
 using UserManagement.BLL.JWT;
 using UserManagement.DAL.Enteties;
+using UserManagement.DAL.Extensions;
+using UserManagement.DAL.Models;
 using UserManagement.DAL.UnitOfWork;
 
 namespace UserManagement.BLL.Services;
@@ -26,16 +28,13 @@ public class UserService : IUserService
         return await Database.UserRepository.DeleteById(id);
     }
 
-    public async Task<IEnumerable<UserProfileDTO>> GetAllUsersProfiles()
+    public async Task<PaginatedList<UserProfileDTO>> GetAllUsersProfiles(PaginationQueryModel paginationQueryModel)
     {
         var users = await Database.UserRepository.GetAll();
-        List<UserProfileDTO> uesrsProfiles = new();
-        foreach (var user in users)
-        {
-            var userDTO = GetUserDTO(user);
-            uesrsProfiles.Add(userDTO);
-        }
-        return uesrsProfiles.ToList();
+
+        var pagedUsers = await users.Select(u => mapper.Map<UserProfileDTO>(u))
+            .PaginateListAsync(paginationQueryModel.PageNumber, paginationQueryModel.PageSize);
+        return pagedUsers;
     }
 
     public async Task<UserProfileDTO> GetUserProfileById(string id)

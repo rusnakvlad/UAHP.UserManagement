@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.BLL.DTO;
 using UserManagement.BLL.IServices;
+using UserManagement.DAL.Models;
 
 namespace UserManagementAPI.Controllers;
 
@@ -19,9 +20,9 @@ public class UserController : ControllerBase
     }
     // Get All Users Profiles
     [HttpGet("GetAll")]
-    public async Task<IEnumerable<UserProfileDTO>> GetAllUsersProfiles()
+    public async Task<PaginatedList<UserProfileDTO>> GetAllUsersProfiles([FromQuery] PaginationQueryModel paginationQueryModel)
     {
-        return await userService.GetAllUsersProfiles();
+        return await userService.GetAllUsersProfiles(paginationQueryModel);
     }
 
     // Get User Profile by id

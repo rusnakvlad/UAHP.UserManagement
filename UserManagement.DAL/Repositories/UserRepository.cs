@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using UserManagement.DAL.EF;
 using UserManagement.DAL.Enteties;
+using UserManagement.DAL.Extensions;
 using UserManagement.DAL.IRepositories;
+using UserManagement.DAL.Models;
 
 namespace UserManagement.DAL.Repositories;
 
@@ -43,9 +45,9 @@ public class UserRepository : IUserRepository
         return await Delete(user);
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IQueryable<User>> GetAll()
     {
-        return await Task.Run(() => UserManager.Users);
+        return await Task.Run(async() => UserManager.Users);
     }
 
     public async Task<User> GetById(string id)

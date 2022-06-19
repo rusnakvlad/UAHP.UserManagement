@@ -15,8 +15,4 @@ public class UserProfileDTO
     public string Email { get; set; }
 
     public string PasswordHash { get; set; }
-
-    public int AdsAmount { get; set; }
-
-    public int ComentsAmount { get; set; }
 }

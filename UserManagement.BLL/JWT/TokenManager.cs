@@ -16,9 +16,7 @@ public static class TokenManager
                 new Claim(ClaimTypes.Name, userProfile.Name),
                 new Claim(ClaimTypes.Surname, userProfile.Surname),
                 new Claim(ClaimTypes.Email, userProfile.Email),
-                new Claim(ClaimTypes.MobilePhone, userProfile.PhoneNumber),
-                new Claim("AdsAmount",userProfile.AdsAmount.ToString()),
-                new Claim("ComentsAmount", userProfile.ComentsAmount.ToString())
+                new Claim(ClaimTypes.MobilePhone, userProfile.PhoneNumber)
             };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions.KEY));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
