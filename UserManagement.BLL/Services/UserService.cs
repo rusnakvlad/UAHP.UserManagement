@@ -17,10 +17,13 @@ public class UserService : IUserService
 {
     private readonly IUnitOfWork Database;
     private readonly IMapper mapper;
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly IGrpcService grpcService;
+
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IGrpcService grpcService)
     {
         Database = unitOfWork;
         this.mapper = mapper;
+        this.grpcService = grpcService;
     }
 
     public async Task<bool> DeleteUserById(string id)
@@ -40,7 +43,10 @@ public class UserService : IUserService
     public async Task<UserProfileDTO> GetUserProfileById(string id)
     {
         var user = await Database.UserRepository.GetById(id);
-        return GetUserDTO(user);
+        var UserDto = GetUserDTO(user);
+        var userCommmentsCount = grpcService.GetUserCommentsCount(id);
+        UserDto.CommentsAmount = userCommmentsCount;
+        return UserDto;
     }
 
     public async Task<UserProfileDTO> GetUserProfileByEmail(string email)

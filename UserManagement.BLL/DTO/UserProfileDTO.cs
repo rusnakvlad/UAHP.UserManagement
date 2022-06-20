@@ -14,5 +14,7 @@ public class UserProfileDTO
 
     public string Email { get; set; }
 
+    public int CommentsAmount { get; set; }
+
     public string PasswordHash { get; set; }
 }

@@ -40,6 +40,7 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 #region SERVICES
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IGrpcService, GrpcService>();
 #endregion
 
 #region AUTOMAPPER

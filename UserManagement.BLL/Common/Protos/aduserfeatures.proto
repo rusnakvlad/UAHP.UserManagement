@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "AdUserFeauresServer";
+
+service GrpcAdUserFeatures {
+    rpc GetUserCommentsCount(GetCommentsCountRequest) returns (GetCommentsCountResponse);
+}
+
+message GetCommentsCountRequest {
+    string userId = 1;
+}
+
+message GetCommentsCountResponse {
+    int32 count = 1;
+}
