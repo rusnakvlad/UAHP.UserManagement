@@ -85,8 +85,8 @@ public class UserController : ControllerBase
 
     //[Authorize]
     [HttpPost("GetByToken")]
-    public async Task<UserProfileDTO> GetByAccessToken([FromBody] string token)
+    public async Task<UserProfileDTO> GetByAccessToken([FromBody] UserTokenDTO token)
     {
-        return await userService.GetUserByAccessToken(new UserTokenDTO() { AccessToken = token });
+        return await userService.GetUserByAccessToken(token);
     }
 }
